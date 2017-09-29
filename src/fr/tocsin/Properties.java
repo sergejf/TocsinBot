@@ -15,7 +15,7 @@ public class Properties {
         java.util.Properties prop = new java.util.Properties();
         String fileName = "config.properties";
         try {
-            ClassLoader classLoader = Runner.class.getClassLoader();
+            ClassLoader classLoader = Bot.class.getClassLoader();
             URL res = Objects.requireNonNull(classLoader.getResource(fileName), "Can't find config.properties");
             InputStream is = new FileInputStream(res.getFile());
             prop.load(is);

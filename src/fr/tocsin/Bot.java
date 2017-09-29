@@ -1,14 +1,32 @@
 package fr.tocsin;
 
+import fr.tocsin.channel.Messenger;
+import fr.tocsin.channel.MessengerCallback;
 import fr.tocsin.identity.User;
-import fr.tocsin.stock.*;
+import fr.tocsin.stock.Market;
+import fr.tocsin.stock.Portfolio;
+import fr.tocsin.stock.Position;
+import fr.tocsin.stock.Screener;
 
 import java.util.ArrayList;
 
-public class Runner {
+public class Bot implements MessengerCallback {
+
+    private Messenger facebook;
+
+    public void input(String s) {
+        System.out.println(s);
+        facebook.output("", "Thanks!");
+    }
+
+    public Bot() {
+        // Instantiate a Facebook Messenger channel
+        facebook = new Messenger(this);
+    }
 
     public static void main(String[] args) {
 
+        Bot r = new Bot();
         Market m = Market.getMarket();
 
         Portfolio pf = new Portfolio("Test", new User());
@@ -33,7 +51,9 @@ public class Runner {
         pf.addPosition(po8);
         pf.addPosition(po9);
 
+
         Screener s = new Screener("WILLR(14, S) < -60.0");
         ArrayList<String> matches = s.screen(pf);
     }
 }
+
