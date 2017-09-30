@@ -4,6 +4,9 @@ import java.util.*;
 
 public class IndicatorFunctions {
 
+    public static final int FUNCTION_NAME = 0;
+    public static final int FUNCTION_PERIOD = 1;
+
     private static ArrayList<String[]> functions = new ArrayList<>();
     // http://traderhq.com/ultimate-guide-williams-r-indicator/
     private static String[] willr = {"WILLR", "14"};

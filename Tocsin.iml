@@ -10,5 +10,6 @@
     <orderEntry type="library" name="com.mashape.unirest:unirest-java:1.4.9" level="project" />
     <orderEntry type="library" name="com.udojava:EvalEx:1.11" level="project" />
     <orderEntry type="library" name="com.sparkjava:spark-core:2.6.0" level="project" />
+    <orderEntry type="library" name="com.amazonaws:aws-java-sdk:1.11.203" level="project" />
   </component>
 </module>

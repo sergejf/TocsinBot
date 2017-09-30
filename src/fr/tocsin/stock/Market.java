@@ -1,83 +1,68 @@
 package fr.tocsin.stock;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.TreeMap;
 
 public class Market {
 
     private static Market m = null;
-    private static TreeMap<String, Exchange> exchanges = new TreeMap<>();
+    private TreeMap<String, TimeSeries> historicalData = new TreeMap<>();
     private static ArrayList<String> symbols = new ArrayList<>();
 
     public static Market getMarket() {
 
         if (m == null) {
             m = new Market();
-            exchanges.put("NYSE", new Exchange("NYSE"));
-            m.addSymbol("NYSE", "MORL");
-            m.addSymbol("NYSE", "SDOG");
-            m.addSymbol("NYSE", "BNDX");
-            m.addSymbol("NYSE", "DGS");
-            m.addSymbol("NYSE", "RWX");
-            m.addSymbol("NYSE", "DFE");
-            m.addSymbol("NYSE", "FYT");
-            m.addSymbol("NYSE", "FV");
-            m.addSymbol("NYSE", "AMU");
+            m.addSymbol("MORL");
+            /*
+            m.addSymbol("SDOG");
+            m.addSymbol("BNDX");
+            m.addSymbol("DGS");
+            m.addSymbol("RWX");
+            m.addSymbol("DFE");
+            m.addSymbol("FYT");
+            m.addSymbol("FV");
+            m.addSymbol("AMU");
+            */
         }
         return m;
     }
 
-    public void addSymbol(String e, String s) {
-        TimeSeries ts = new TimeSeries(s);
-        ts.refreshBars();
-        ts.refreshIndicators();
-        exchanges.get(e).addSymbol(s);
-        symbols.add(s);
+    public void addSymbol(String symbol) {
+        if (!this.historicalData.containsKey(symbol)) {
+            TimeSeries t = new TimeSeries(symbol);
+            t.refreshBars();
+            t.refreshIndicators();
+            this.historicalData.put(symbol, t);
+            this.symbols.add(symbol);
+        }
     }
 
     public boolean hasSymbol(String s) {
 
-        // FIXME: should add symbols ArrayList check
-        for (Map.Entry me : exchanges.entrySet()) {
-            Exchange e = (Exchange) me.getValue();
-            if (e.hasSymbol(s)) {
-                return true;
-            }
-        }
-        return false;
+        return this.historicalData.containsKey(s);
     }
 
     public double getIndicatorValue(String s, String d) {
-        for (Map.Entry me : exchanges.entrySet()) {
-            Exchange e = (Exchange) me.getValue();
-            if (e.hasSymbol(s)) {
-                return e.getIndicatorValue(s, d);
-            }
+        if (this.historicalData.containsKey(s)) {
+            return this.historicalData.get(s).getIndicatorValue(d);
         }
-        return 0.0;
+        return -1.0;
     }
 
     public double getLastIndicatorValue(String s) {
-        for (Map.Entry me : exchanges.entrySet()) {
-            Exchange e = (Exchange) me.getValue();
-            if (e.hasSymbol(s)) {
-                return e.getLastIndicatorValue(s);
-            }
+        if (this.historicalData.containsKey(s)) {
+            return this.historicalData.get(s).getLastIndicatorValue();
         }
-        return 0.0;
+        return -1.0;
     }
 
     public double getLastBarClose(String s) {
-        for (Map.Entry me : exchanges.entrySet()) {
-            Exchange e = (Exchange) me.getValue();
-            if (e.hasSymbol(s)) {
-                return e.getLastBarClose(s);
-            }
+        if (this.historicalData.containsKey(s)) {
+            return this.historicalData.get(s).getLastBarClose();
         }
-        return 0.0;
+        return -1.0;
     }
-
 
     public int indexOfSymbol(String s) {
         return symbols.indexOf(s);

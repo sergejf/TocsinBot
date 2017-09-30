@@ -15,12 +15,16 @@ public class Messenger {
 
     public Messenger(MessengerCallback cb) {
         this.callback = cb;
-        Properties cfg = new Properties();
 
         port(9000);
 
-        post("/", (request, response) -> {
+        post("/input", (request, response) -> {
             callback.input(request.body());
+            response.status(200);
+            return response;
+        });
+
+        post("/status", (request, response) -> {
             response.status(200);
             return response;
         });

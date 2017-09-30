@@ -30,7 +30,7 @@ public class Screener {
 
     public ArrayList<String> screen(Portfolio p) {
         Market m;
-        BigDecimal res = null;
+        BigDecimal res;
         ArrayList<String> matches = new ArrayList<>();
         ArrayList<String> symbols;
         // check that portfolio symbol exists in stock market
@@ -38,7 +38,7 @@ public class Screener {
         m = Market.getMarket();
         for (String s : symbols) {
             if (!m.hasSymbol(s)) {
-                m.addSymbol("NYSE", s); // FIXME: symbol must belong to an exchange
+                m.addSymbol(s);
             }
             // eval screen
             ArrayList<String[]> functions = IndicatorFunctions.getFunctions();

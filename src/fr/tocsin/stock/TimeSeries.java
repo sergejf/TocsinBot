@@ -1,9 +1,9 @@
 package fr.tocsin.stock;
 
 import fr.tocsin.datasource.AlphaVantage;
+import fr.tocsin.datasource.AwsDynamoDB;
 
-import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.*;
 
 public class TimeSeries {
 
@@ -20,12 +20,12 @@ public class TimeSeries {
     }
 
     public double getIndicatorValue(String date) {
-        return this.indicatorValues.get(date).getValue();
+        return this.indicatorValues.get(date).getIndicatorValue();
     }
 
     // Return indicator value: if today is a trading day, return current value, otherwise return value of previous close.
     public double getLastIndicatorValue() {
-        return this.indicatorValues.get(this.indicatorValues.lastKey()).getValue();
+        return this.indicatorValues.get(this.indicatorValues.lastKey()).getIndicatorValue();
     }
 
     public double getLastBarClose() {
@@ -34,16 +34,21 @@ public class TimeSeries {
 
     public void refreshBars() {
         AlphaVantage dataSource = new AlphaVantage();
-        String data = dataSource.loadBarData(this.symbol);
-        this.bars = dataSource.parseBarData(data);
+        this.bars = dataSource.getBars(this.symbol);
     }
 
     public void refreshIndicators() {
         AlphaVantage dataSource = new AlphaVantage();
         ArrayList<String[]> functions = IndicatorFunctions.getFunctions();
         for (String[] f : functions) {
-            String data = dataSource.loadIndicatorData(this.symbol, f[0], Integer.parseInt(f[1]));
-            this.indicatorValues = dataSource.parseIndicatorData(data, f[0], Integer.parseInt(f[1]));
+            this.indicatorValues = dataSource.getIndicatorValues(this.symbol, f[IndicatorFunctions.FUNCTION_NAME], Integer.parseInt(f[IndicatorFunctions.FUNCTION_PERIOD]));
+        }
+
+        Set set = indicatorValues.entrySet();
+        Iterator it = set.iterator();
+        while (it.hasNext()) {
+            Map.Entry me = (Map.Entry) it.next();
+            AwsDynamoDB.setIndicatorValue((IndicatorValue) me.getValue());
         }
     }
 }

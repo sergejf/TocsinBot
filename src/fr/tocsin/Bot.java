@@ -1,7 +1,9 @@
 package fr.tocsin;
 
+
 import fr.tocsin.channel.Messenger;
 import fr.tocsin.channel.MessengerCallback;
+import fr.tocsin.datasource.AwsDynamoDB;
 import fr.tocsin.identity.User;
 import fr.tocsin.stock.Market;
 import fr.tocsin.stock.Portfolio;
@@ -26,9 +28,17 @@ public class Bot implements MessengerCallback {
 
     public static void main(String[] args) {
 
-        Bot r = new Bot();
+        Bot b = new Bot();
+
+        AwsDynamoDB db = AwsDynamoDB.getDB();
+        AwsDynamoDB.createTable("IndicatorValues");
+
+
         Market m = Market.getMarket();
 
+        AwsDynamoDB.getIndicatorValue("IndicatorValues", "2017-09-29MORLWILLR14");
+
+        /*
         Portfolio pf = new Portfolio("Test", new User());
 
         Position po1 = new Position("MORL", 157, 14.88);
@@ -51,9 +61,9 @@ public class Bot implements MessengerCallback {
         pf.addPosition(po8);
         pf.addPosition(po9);
 
-
         Screener s = new Screener("WILLR(14, S) < -60.0");
         ArrayList<String> matches = s.screen(pf);
+        */
     }
 }
 
