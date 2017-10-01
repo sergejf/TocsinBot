@@ -5,12 +5,12 @@ import fr.tocsin.Util;
 public class Position {
 
     // position is long only
+    private String key; // Portfolio.id +
     private String symbol;
     private double quantity;
     private double cost; // average cost
     private double price;
     private double profit;
-    private String updated;
 
     public Position(String symbol, double quantity, double cost) {
         this.symbol = symbol;
@@ -18,7 +18,6 @@ public class Position {
         this.cost = cost;
         this.price = Market.getMarket().getLastBarClose(symbol);
         this.profit = this.quantity * this.price - this.quantity * this.cost;
-        this.updated = Util.todayDate();
     }
 
     public String getSymbol() {

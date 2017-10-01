@@ -16,8 +16,6 @@ public class Market {
             m = new Market();
             m.addSymbol("MORL");
             m.addSymbol("SDOG");
-
-                        /*
             m.addSymbol("BNDX");
             m.addSymbol("DGS");
             m.addSymbol("RWX");
@@ -25,7 +23,6 @@ public class Market {
             m.addSymbol("FYT");
             m.addSymbol("FV");
             m.addSymbol("AMU");
-            */
         }
         return m;
     }

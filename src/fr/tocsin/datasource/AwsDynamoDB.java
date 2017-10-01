@@ -12,6 +12,7 @@ import fr.tocsin.Properties;
 import fr.tocsin.identity.User;
 import fr.tocsin.stock.Bar;
 import fr.tocsin.stock.IndicatorValue;
+import fr.tocsin.stock.Portfolio;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -141,6 +142,23 @@ public class AwsDynamoDB {
 
         } catch (Exception e) {
             System.err.println("getUser failed.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        mapper.save(portfolio);
+    }
+
+    // Key format "PortfolioNamemessenger:123456789"
+    public Portfolio getPortfolio(String key) {
+        try {
+            Portfolio portfolio = mapper.load(Portfolio.class, key);
+            return portfolio;
+
+        } catch (Exception e) {
+            System.err.println("getPortfolio failed.");
             System.err.println(e.getMessage());
         }
         return null;

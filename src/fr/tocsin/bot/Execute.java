@@ -1,17 +1,19 @@
 /*
-    Bot commands: object verb parameters
+    Bot commands: must start with an object
 
-        help -> display list of commands
-        portfolio new "id" -> new portfolio
-        portfolio "id" print -> print portfolio positions
-        portfolio "id" buy "symbol" "quantity" "price" -> add long position to portfolio
-        portfolio "id" screen "id" now -> screen portfolio now
-        portfolio "id" screen "id" daily -> screen portfolio daily
-        portfolio "id" screen "id" never -> stop daily portfolio screen
-        screen new "id" assign "expression" -> new screen and assign expression
-        screen "id" print -> print expression for that screen
+        help                                -> display list of commands
+        portfolio new "id"                  -> new portfolio
+        portfolio "id" print                -> print portfolio positions
+        portfolio "id" set "symbol" "quantity" "price" -> set long position in portfolio
+        portfolio "id" screen "id" now      -> screen portfolio now
+        portfolio "id" screen "id" daily    -> screen portfolio daily
+        portfolio "id" screen "id" never    -> stop daily portfolio screen
+        screen new "id" set "expression"    -> new screen and assign expression
+        screen "id" print                   -> print expression for that screen
  */
 
+// FIXME: when adding delete, ensure referential integrity
+// FIXME: use separators between concatenated key parts
 
 package fr.tocsin.bot;
 
@@ -41,7 +43,7 @@ public class Execute implements MessengerCallback {
 
         input = body;
         Understand bot = new Understand();
-        output = bot.parseAndRespond(input);
+        output = bot.parseAndRespond(user, input);
 
         // Respond to user
         facebook.send(user.getChannelId(), output);
@@ -62,6 +64,8 @@ public class Execute implements MessengerCallback {
         db.createTable("IndicatorValues");
         db.createTable("Bars");
         db.createTable("Users");
+        db.createTable("Portfolios");
+        db.createTable("Positions");
 
         // Initialize Market
         Market m = Market.getMarket();

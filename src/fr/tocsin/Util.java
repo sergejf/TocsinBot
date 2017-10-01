@@ -45,4 +45,8 @@ public class Util {
         }
         return ft.format(lastWeekday);
     }
+
+    public static String stripQuotes(String string) {
+        return string.replaceAll("^\"|\"$", "");
+    }
 }
