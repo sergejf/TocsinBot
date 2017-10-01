@@ -14,8 +14,11 @@
 
 /*  To run this you need:
 
-    1) Inspect requests: http://localhost:4040/inspect/http
-    2) Chat with bot: https://www.facebook.com/TocsinBot-491275257908762/inbox
+    1) Launch ngrok: ./ngrok http 9000
+    2) Inspect requests: http://localhost:4040/inspect/http
+    3) Launch dynamodb locally, java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+    4) Run main() method in the Execute class
+    5) Chat with bot: https://www.facebook.com/TocsinBot-491275257908762/inbox
  */
 
 // FIXME: when adding delete, ensure referential integrity
