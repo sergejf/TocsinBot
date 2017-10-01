@@ -1,26 +1,48 @@
 package fr.tocsin;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 
 public class Util {
 
-    public static Date parseDate(String d) {
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-        Date t;
+    public static LocalDate parseDate(String dateString) {
+        LocalDate date;
         try {
-            t = ft.parse(d);
-        } catch (ParseException e) {
-            System.out.println("Unparseable using " + ft);
-            t = null;
+            date = LocalDate.parse(dateString);
+        } catch (DateTimeParseException e) {
+            System.err.println("parseData failed. Date: " + dateString);
+            System.err.println(e.getMessage());
+            date = null;
         }
-        return t;
+        return date;
     }
 
+    // Dates are normalized to the New York time zone
     public static String todayDate() {
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-        Date t = new Date();
-        return ft.format(t);
+        DateTimeFormatter ft = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        ZonedDateTime today = ZonedDateTime.now(ZoneId.of("America/New_York"));
+        return ft.format(today);
+    }
+
+    public static String lastWeekday() {
+        DateTimeFormatter ft = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        ZonedDateTime today = ZonedDateTime.now(ZoneId.of("America/New_York"));
+        ZonedDateTime lastWeekday;
+
+        switch (today.getDayOfWeek()) {
+            case SATURDAY:
+                lastWeekday = today.minus(1, ChronoUnit.DAYS);
+                break;
+            case SUNDAY:
+                lastWeekday = today.minus(2, ChronoUnit.DAYS);
+                break;
+            default:
+                lastWeekday = today;
+        }
+        return ft.format(lastWeekday);
     }
 }

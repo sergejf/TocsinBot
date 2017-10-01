@@ -20,7 +20,17 @@ public class Messenger {
         port(Integer.parseInt(cfg.getProperty("messenger.port")));
 
         post("/input", (request, response) -> {
-            callback.input(request.body());
+
+            // Get request parameters
+            String from, to, body;
+            from = request.queryParams("From");
+            to = request.queryParams("To");
+            body = request.queryParams("Body");
+
+            // Submit request parameters to callback
+            callback.receive(from, to, body);
+
+            // Respond with http status 200
             response.status(200);
             return response;
         });
@@ -31,7 +41,7 @@ public class Messenger {
         });
     }
 
-    public String output(String to, String body) {
+    public String send(String to, String body) {
         Properties cfg = new Properties();
         HttpResponse<String> res;
         String data;
@@ -48,8 +58,10 @@ public class Messenger {
                     .asString();
             data = res.getBody();
         } catch (UnirestException e) {
+            System.err.println("output failed. To: " + to + "Body: " + body);
+            System.err.println(e.getMessage());
             e.printStackTrace();
-            data = "";
+            data = null;
         }
         return data;
     }

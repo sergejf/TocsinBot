@@ -8,12 +8,15 @@ import java.util.TreeMap;
 
 public class Portfolio {
 
-    private String name;
+    private String key; // Portfolio.id + User.key
+    private String id;
+    private String userId;
+
     private TreeMap<String, Position> positions;
     private User user;
 
-    public Portfolio(String name, User user) {
-        this.name = name;
+    public Portfolio(String id, User user) {
+        this.id = id;
         this.positions = new TreeMap<>();
         this.user = user;
     }

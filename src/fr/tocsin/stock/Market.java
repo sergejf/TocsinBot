@@ -1,6 +1,7 @@
 package fr.tocsin.stock;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.TreeMap;
 
 public class Market {
@@ -14,8 +15,9 @@ public class Market {
         if (m == null) {
             m = new Market();
             m.addSymbol("MORL");
-            /*
             m.addSymbol("SDOG");
+
+                        /*
             m.addSymbol("BNDX");
             m.addSymbol("DGS");
             m.addSymbol("RWX");
@@ -29,10 +31,12 @@ public class Market {
     }
 
     public void addSymbol(String symbol) {
-        if (!this.historicalData.containsKey(symbol)) {
+
+        // If symbol not already loaded in memory, then try to load it
+        if (!this.hasSymbol(symbol)) {
             TimeSeries t = new TimeSeries(symbol);
             t.refreshBars();
-            t.refreshIndicators();
+            t.refreshIndicatorValues(Optional.empty(), Optional.empty());
             this.historicalData.put(symbol, t);
             this.symbols.add(symbol);
         }
@@ -43,16 +47,16 @@ public class Market {
         return this.historicalData.containsKey(s);
     }
 
-    public double getIndicatorValue(String s, String d) {
-        if (this.historicalData.containsKey(s)) {
-            return this.historicalData.get(s).getIndicatorValue(d);
+    public double getIndicatorValue(String symbol, String date, String indicatorFunction, int indicatorPeriod) {
+        if (this.historicalData.containsKey(symbol)) {
+            return this.historicalData.get(symbol).getIndicatorValue(date, indicatorFunction, indicatorPeriod);
         }
         return -1.0;
     }
 
-    public double getLastIndicatorValue(String s) {
-        if (this.historicalData.containsKey(s)) {
-            return this.historicalData.get(s).getLastIndicatorValue();
+    public double getLastIndicatorValue(String symbol, String indicatorFunction, int indicatorPeriod) {
+        if (this.historicalData.containsKey(symbol)) {
+            return this.historicalData.get(symbol).getLastIndicatorValue(indicatorFunction, indicatorPeriod);
         }
         return -1.0;
     }

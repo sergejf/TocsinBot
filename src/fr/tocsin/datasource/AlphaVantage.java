@@ -23,8 +23,10 @@ public class AlphaVantage {
             res = Unirest.get(req).header("cache-control", "no-cache").asString();
             data = res.getBody();
         } catch (UnirestException e) {
+            System.err.println("loadBarData failed.");
+            System.err.println(e.getMessage());
             e.printStackTrace();
-            data = "";
+            data = null;
         }
         return data;
     }
@@ -37,7 +39,19 @@ public class AlphaVantage {
         while (keyItr.hasNext()) {
             String date = keyItr.next();
             JSONObject item = (JSONObject) timeSeries.get(date);
-            Bar bar = new Bar(symbol, item.getDouble("1. open"), item.getDouble("2. high"), item.getDouble("3. low"), item.getDouble("4. close"), item.getDouble("5. volume"));
+
+            // Create new Bar
+            Bar bar = new Bar();
+            bar.setKey(date + symbol);
+            bar.setDate(date);
+            bar.setSymbol(symbol);
+            bar.setOpen(item.getDouble("1. open"));
+            bar.setHigh(item.getDouble("2. high"));
+            bar.setLow(item.getDouble("3. low"));
+            bar.setClose(item.getDouble("4. close"));
+            bar.setVolume(item.getDouble("5. volume"));
+
+            // Add new Bar to map
             bars.put(date, bar);
         }
         return bars;
@@ -58,8 +72,10 @@ public class AlphaVantage {
             res = Unirest.get(req).header("cache-control", "no-cache").asString();
             data = res.getBody();
         } catch (UnirestException e) {
+            System.err.println("loadIndicatorValue failed.");
+            System.err.println(e.getMessage());
             e.printStackTrace();
-            data = "";
+            data = null;
         }
         return data;
     }

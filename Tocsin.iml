@@ -11,5 +11,6 @@
     <orderEntry type="library" name="com.udojava:EvalEx:1.11" level="project" />
     <orderEntry type="library" name="com.sparkjava:spark-core:2.6.0" level="project" />
     <orderEntry type="library" name="com.amazonaws:aws-java-sdk:1.11.203" level="project" />
+    <orderEntry type="library" name="org.slf4j:slf4j-simple:1.7.25" level="project" />
   </component>
 </module>

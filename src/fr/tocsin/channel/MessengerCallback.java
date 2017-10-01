@@ -1,5 +1,5 @@
 package fr.tocsin.channel;
 
 public interface MessengerCallback {
-    void input(String s);
+    void receive(String from, String to, String body);
 }

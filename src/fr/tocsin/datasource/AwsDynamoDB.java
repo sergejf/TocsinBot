@@ -5,11 +5,12 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.TableCollection;
 import com.amazonaws.services.dynamodbv2.model.*;
 import fr.tocsin.Properties;
+import fr.tocsin.identity.User;
+import fr.tocsin.stock.Bar;
 import fr.tocsin.stock.IndicatorValue;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class AwsDynamoDB {
         return awsDB;
     }
 
-    public static void createTable(String tableName) {
+    public void createTable(String tableName) {
 
         if (!hasTable(tableName)) {
             try {
@@ -61,13 +62,13 @@ public class AwsDynamoDB {
                 // Output table information
                 getTableInformation(tableName);
             } catch (Exception e) {
-                System.err.println("CreateTable request failed for " + tableName);
+                System.err.println("createTable failed. Table name: " + tableName);
                 System.err.println(e.getMessage());
             }
         }
     }
 
-    public static void getTableInformation(String tableName) {
+    public void getTableInformation(String tableName) {
 
         System.out.println("Describing " + tableName);
 
@@ -80,7 +81,7 @@ public class AwsDynamoDB {
                 tableDescription.getProvisionedThroughput().getWriteCapacityUnits());
     }
 
-    public static boolean hasTable(String tableName) {
+    public boolean hasTable(String tableName) {
 
         TableCollection<ListTablesResult> tables = dynamoDB.listTables();
         Iterator<Table> iterator = tables.iterator();
@@ -94,23 +95,55 @@ public class AwsDynamoDB {
         return false;
     }
 
-    public static void setIndicatorValue(IndicatorValue indicatorValue) {
+    public void setIndicatorValue(IndicatorValue indicatorValue) {
         mapper.save(indicatorValue);
     }
 
-    public static void getIndicatorValue(String tableName, String key) {
-        Table table = dynamoDB.getTable(tableName);
-
+    // Key format: "2017-09-29MORLWILLR14"
+    public IndicatorValue getIndicatorValue(String key) {
         try {
-            Item item = table.getItem("Key", key);
-
-            System.out.println("Printing item after retrieving it....");
-            System.out.println(item.toJSONPretty());
+            IndicatorValue indicatorValue = mapper.load(IndicatorValue.class, key);
+            return indicatorValue;
 
         } catch (Exception e) {
-            System.err.println("GetItem failed.");
+            System.err.println("getIndicatorValue failed.");
             System.err.println(e.getMessage());
         }
+        return null;
+    }
+
+    public void setBar(Bar bar) {
+        mapper.save(bar);
+    }
+
+    // Key format "2017-09-29MORL"
+    public Bar getBar(String key) {
+        try {
+            Bar bar = mapper.load(Bar.class, key);
+            return bar;
+
+        } catch (Exception e) {
+            System.err.println("getBar failed.");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public void setUser(User user) {
+        mapper.save(user);
+    }
+
+    // Key format "messenger:123456789"
+    public User getUser(String key) {
+        try {
+            User user = mapper.load(User.class, key);
+            return user;
+
+        } catch (Exception e) {
+            System.err.println("getUser failed.");
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 
 }
@@ -118,5 +151,7 @@ public class AwsDynamoDB {
 /* Useful CLI commands:
 
         aws dynamodb scan --table-name IndicatorValues --endpoint-url http://localhost:8000
+        aws dynamodb scan --table-name Bars --endpoint-url http://localhost:8000
+        aws dynamodb scan --table-name Users --endpoint-url http://localhost:8000
 
 */

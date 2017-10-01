@@ -6,11 +6,16 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Screener {
+public class Screen {
+
+    private String key; // Screen.id + User.key
+    private String id;
+    private String userId;
+    private String screen;
 
     private Expression expression;
 
-    public Screener(String condition) {
+    public Screen(String condition) {
         this.expression = new Expression(condition);
 
         // http://traderhq.com/ultimate-guide-williams-r-indicator/
@@ -21,14 +26,14 @@ public class Screener {
                 Market m = Market.getMarket();
                 int period = parameters.get(0).intValue();
                 String symbol = m.getSymbol(parameters.get(1).intValue());
-                double v = m.getLastIndicatorValue(symbol);
+                double v = m.getLastIndicatorValue(symbol, "WILLR", period);
                 return new BigDecimal(v);
             }
         };
         this.expression.addFunction(willr);
     }
 
-    public ArrayList<String> screen(Portfolio p) {
+    public ArrayList<String> apply(Portfolio p) {
         Market m;
         BigDecimal res;
         ArrayList<String> matches = new ArrayList<>();
