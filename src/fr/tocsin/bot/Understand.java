@@ -1,3 +1,5 @@
+// TODO: investigate if Messenger output supports bold (e.g. Markdown)
+
 package fr.tocsin.bot;
 
 import fr.tocsin.Util;
@@ -60,6 +62,7 @@ public class Understand {
             System.err.println("parseAndRespond failed. Input: " + input);
             System.err.println(e.getMessage());
             e.printStackTrace();
+            return BOT_RES_NOMATCH;
         }
 
         // Parse input

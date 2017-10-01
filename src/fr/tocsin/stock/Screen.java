@@ -1,3 +1,7 @@
+// TODO: implement screens on global portfolio percentage change in value, like https://www.investfly.com/portfolio/838604
+// TODO: add screen on symbol close N weekdays ago, e.g. "CLOSE(S, -N) < 50"
+// TODO: review https://www.investfly.com/stock-screener and see what other screeners could be useful
+
 package fr.tocsin.stock;
 
 import com.udojava.evalex.Expression;

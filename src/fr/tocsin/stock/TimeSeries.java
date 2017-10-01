@@ -55,6 +55,7 @@ public class TimeSeries {
 
         // Refresh DB if last weekday bar isn't already in DB
         AwsDynamoDB db = AwsDynamoDB.getDB();
+        // FIXME: this assume the lastWeekday wasn't a holiday. Use previousDay(lastWeekday) to skip holidays
         if (db.getBar(Util.lastWeekday() + symbol) == null) {
             // Load bars from data source
             AlphaVantage dataSource = new AlphaVantage();

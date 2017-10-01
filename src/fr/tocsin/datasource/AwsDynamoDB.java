@@ -1,3 +1,7 @@
+// FIXME: refactor methods to start with db (e.g. dbGetX or dbGet) to be less confusing with normal getters/setters
+// TODO: implement dbScanPositions, http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.Java.04.html
+// TODO: move DynamoDB from local to AWS, http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html
+
 package fr.tocsin.datasource;
 
 import com.amazonaws.client.builder.AwsClientBuilder;

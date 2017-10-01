@@ -1,3 +1,5 @@
+// TODO: implement previousWeekday(String date) in case lastWeekday is a holiday, https://barta.me/new-date-time-api-in-java-8/
+
 package fr.tocsin;
 
 import java.time.LocalDate;

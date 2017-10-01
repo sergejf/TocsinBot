@@ -12,8 +12,20 @@
         screen "id" print                   -> print expression for that screen
  */
 
+/*  To run this you need:
+
+    1) Inspect requests: http://localhost:4040/inspect/http
+    2) Chat with bot: https://www.facebook.com/TocsinBot-491275257908762/inbox
+ */
+
 // FIXME: when adding delete, ensure referential integrity
 // FIXME: use separators between concatenated key parts
+// FIXME: delete local DB to erase old keys, etc. and refresh data
+// TODO: add Junit to Intellij https://www.jetbrains.com/help/idea/configuring-testing-libraries.html
+// TODO: add unit tests, http://www.vogella.com/tutorials/JUnit/article.html
+// TODO: package Tocsin as jar file, https://www.jetbrains.com/help/idea/packaging-a-module-into-a-jar-file.html
+// TODO: deploy jar to AWS using Elastic Beanstalk, http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/java-se-platform.html
+// TODO: long term, replace AlphaVantage with native indicator functions to handle LSE symbols, http://www.fmlabs.com/reference/
 
 package fr.tocsin.bot;
 
@@ -98,11 +110,3 @@ public class Execute implements MessengerCallback {
         */
     }
 }
-
-/*
-        Old tests:
-
-        LocalDate ld = Util.parseDate("2017-09-15");
-        System.out.println(Util.todayDate());
-        System.out.println(Util.lastWeekday());
- */
